@@ -15,8 +15,11 @@ class Time24:
                     return True 
         return False
 
-    def __sub__(self, other):
-        """ Calculate absolute distance between two times """
+def __sub__(self, other):
+    if isinstance(other, int): # right op is integer
+        return Time24(self.hours - other, self.minutes)
+
+    if isinstance(other, Time24):  # right op is Time24
         if self > other:
             larger = self
             smaller = other
@@ -35,9 +38,12 @@ class Time24:
             hrs = 24 - (hrs + 1)
             mins = 60 - mins
 
-        # Return new Time24 instance 
+        # Return new Time24 instance
         return Time24(hrs, mins)
 
+    print('{} unsupported'.format(type(other)))
+    raise NotImplementedError
+    
 t1 = input('Enter time1 (hours:minutes): ')
 tokens = t1.split(':')
 time1 = Time24(int(tokens[0]), int(tokens[1]))
